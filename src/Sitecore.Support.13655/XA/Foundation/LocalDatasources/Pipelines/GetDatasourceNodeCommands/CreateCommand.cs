@@ -6,6 +6,7 @@
   using Sitecore.Data.Masters;
   using Sitecore.DependencyInjection;
   using Sitecore.Globalization;
+  using Sitecore.Support.XA.Foundation.Geospatial;
   using Sitecore.XA.Foundation.LocalDatasources;
   using Sitecore.XA.Foundation.LocalDatasources.Pipelines.GetDatasourceNodeCommands;
   using Sitecore.XA.Foundation.SitecoreExtensions.Extensions;
@@ -21,7 +22,9 @@
       {
         string text = ID.Parse(args.ItemId).ToString();
         Item item = database.GetItem(text);
-        if (item != null && !text.Equals(Items.VirtualPageStandardValue.ToString()) && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesignFolder.ID))
+        #region Modified code
+        if (item != null && !text.Equals(Items.VirtualPageStandardValue.ToString()) && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesignFolder.ID) && !item.IsGeospatialItem())
+        #endregion
         {
           string item2 = string.Empty;
           if (item.InheritsFrom(Items.VirtualPageData) || item.InheritsFrom(Sitecore.XA.Foundation.Editing.Templates.PageDataFolder))

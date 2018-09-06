@@ -6,6 +6,7 @@
   using Sitecore.Data.Items;
   using Sitecore.DependencyInjection;
   using Sitecore.Globalization;
+  using Sitecore.Support.XA.Foundation.Geospatial;
   using Sitecore.XA.Foundation.LocalDatasources.Pipelines.GetDatasourceNodeCommands;
   using Sitecore.XA.Foundation.SitecoreExtensions.Extensions;
   using Sitecore.XA.Foundation.SitecoreExtensions.Repositories;
@@ -37,7 +38,9 @@
         Database database = ServiceLocator.ServiceProvider.GetService<IDatabaseRepository>().GetDatabase(args.DatabaseName);
         ID iD = ID.Parse(args.ItemId);
         Item item = database.GetItem(iD);
-        if (item != null && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesignFolder.ID) && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesign.ID) && !item.Parent.InheritsFrom(Sitecore.XA.Foundation.Multisite.Templates.Data.ID))
+        #region Modified code
+        if (item != null && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesignFolder.ID) && !item.InheritsFrom(Sitecore.XA.Foundation.Presentation.Templates.PartialDesign.ID) && !item.Parent.InheritsFrom(Sitecore.XA.Foundation.Multisite.Templates.Data.ID) && !item.IsGeospatialItem())
+        #endregion
         {
           string item2 = string.Format("<a href=\"#\" onclick=\"javascript:return scForm.postEvent(this,event,'CopyDataSource(&amp;quot;{0}&amp;quot;)')\">{1}</a>", iD, Translate.Text("Copy To"));
           args.Commands.Add(item2);
